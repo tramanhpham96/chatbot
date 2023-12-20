@@ -19,17 +19,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
-      - name: npm install, build, and test
-        run: |
-          ls
-          cd starter/ContosoDentistryChatBot
-          npm install
-          npm run build --if-present
-          npm run test --if-present
-
+          
       - name: Zip artifact for deployment
         run: |
-          cd starter/ContosoDentistryChatBot
+          cd ContosoDentistryWebsite
           zip release.zip ./* -r
 
       - name: Upload artifact for deployment job
@@ -58,7 +51,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'anhptt6-as'
+          app-name: 'anhptt6-web'
           slot-name: 'Production'
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_76029B688CAE421B927AB32E98C29EEF }}
