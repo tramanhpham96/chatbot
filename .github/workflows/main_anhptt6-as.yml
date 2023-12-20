@@ -61,4 +61,4 @@ jobs:
           app-name: 'anhptt6-as'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_76029B688CAE421B927AB32E98C29EEF }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_AS }}
