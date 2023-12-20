@@ -66,6 +66,7 @@ const LuisConfiguration = {
     applicationId: process.env.LuisAppId,
     endpointKey: process.env.LuisAPIKey,
     endpoint: process.env.LuisAPIHostName,
+    deploymentId: process.env.LuisAppDeployment
 }
 
 const SchedulerConfiguration = {
