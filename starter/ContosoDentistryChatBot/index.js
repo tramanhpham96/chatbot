@@ -5,7 +5,7 @@ const path = require('path');
 
 const dotenv = require('dotenv');
 // Import required bot configuration.
-const ENV_FILE = path.join(__dirname, '.env');
+const ENV_FILE = path.join(__dirname, 'env');
 dotenv.config({ path: ENV_FILE });
 
 const restify = require('restify');
@@ -82,6 +82,9 @@ const configuration = {
 // Create the main dialog.
 const myBot = new DentaBot(configuration, {});
 
+server.get("/", (req, res, next) => {
+    res.json({ message: "hello world" })
+})
 // Listen for incoming requests.
 server.post('/api/messages', (req, res) => {
     adapter.processActivity(req, res, async (context) => {
