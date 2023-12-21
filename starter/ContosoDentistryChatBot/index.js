@@ -82,9 +82,6 @@ const configuration = {
 // Create the main dialog.
 const myBot = new DentaBot(configuration, {});
 
-server.get("/", (req, res) => {
-    res.json({ message: "hello world" })
-})
 // Listen for incoming requests.
 server.post('/api/messages', (req, res) => {
     adapter.processActivity(req, res, async (context) => {
