@@ -44,7 +44,7 @@ class DentaBot extends ActivityHandler {
         // create a QnAMaker connector
         this.QnAMaker = new CustomQuestionAnswering(configuration.QnAConfiguration)
         // // create a DentistScheduler connector
-        this.dentistScheduler = new DentistScheduler(configuration)
+        this.dentistScheduler = new DentistScheduler(configuration.SchedulerConfiguration)
 
         // // create a IntentRecognizer connector
         this.intentRecognizer = new IntentRecognizer(configuration.LuisConfiguration, qnaOptions);
@@ -65,29 +65,28 @@ class DentaBot extends ActivityHandler {
             // // send user input to IntentRecognizer and collect the response in a variable
             // // don't forget 'await'
             // const LuisResults = await this.intentRecognizer.executeLuisQuery(context)
-            // const LuisResults = await this.analyzeText(context.activity.text)
-            // LuisResults.result.prediction.intents.sort(function(a, b) { 
-            //     return b.confidenceScore - a.confidenceScore;})
+            const LuisResults = await this.analyzeText(context.activity.text)
+            LuisResults.result.prediction.intents.sort(function(a, b) { 
+                return b.confidenceScore - a.confidenceScore;})
             
-            // LuisResults.result.prediction.entities.length > 0
-            // console.log('test')
-            // // // determine which service to respond with based on the results from LUIS //
-            // if (LuisResults.result.prediction.intents[0].category == "GetAvailability" &&
-            // LuisResults.result.prediction.intents[0].confidenceScore > 0.5 &&
-            // LuisResults.result.prediction.entities.length > 0){
-            //     const date_time = LuisResults.result.prediction.entities[0].text;
-            //     await context.sendActivity(this.dentistScheduler.getAvailability());
-            //     await next();
-            //     return;
-            // }
-            // else if (LuisResults.result.prediction.intents[0].category == "ScheduleAppointment" &&
-            // LuisResults.result.prediction.intents[0].confidenceScore > 0.5 &&
-            // LuisResults.result.prediction.entities.length > 0){
-            //     const date_time = LuisResults.result.prediction.entities[0].text;
-            //     await context.sendActivity(this.dentistScheduler.scheduleAppointment(date_time));
-            //     await next();
-            //     return;
-            // }
+            LuisResults.result.prediction.entities.length > 0
+            // // determine which service to respond with based on the results from LUIS //
+            if (LuisResults.result.prediction.intents[0].category == "GetAvailability" &&
+            LuisResults.result.prediction.intents[0].confidenceScore > 0.5){
+                const text = await this.dentistScheduler.getAvailability()
+                await context.sendActivity(text);
+                await next();
+                return;
+            }
+            else if (LuisResults.result.prediction.intents[0].category == "ScheduleAppointment" &&
+            LuisResults.result.prediction.intents[0].confidenceScore > 0.5 &&
+            LuisResults.result.prediction.entities.length > 0){
+                const date_time = LuisResults.result.prediction.entities[0].text;
+                const text = await this.dentistScheduler.scheduleAppointment(date_time)
+                await context.sendActivity(text);
+                await next();
+                return;
+            }
             if (qnaResults[0]) {
                 await context.sendActivity(`${qnaResults[0].answer}`);
             }
